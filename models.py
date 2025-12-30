@@ -7,6 +7,7 @@ class Users(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key = True)
     username = db.Column(db.String(100), nullable = False, unique = True)
     password = db.Column(db.String(200), nullable = False, unique = True)
+    flag=db.Column(db.String(200), default="Inactive")
 
 
 class Patient(db.Model):

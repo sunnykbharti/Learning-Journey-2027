@@ -170,13 +170,13 @@ def admission():
 #----------------------------------------- PATIENT SEARCH -------------------------------------------------
 
 #@app.route('/search')
+
 #----------------------------------------- PATIENT RECORDS ------------------------------------------------
 
-# @app.route('/patientrecords', methods=["GET","POST"])
-# def patientrecords():
-
-
-
+@app.route('/patientrecord', methods=["GET","POST"])
+def patientrecord():
+    patients = Patient.query.all()
+    return render_template("patientrecord.html",patients=patients)
 
 
 #------------------------------------------------ FINAL RUN THE APP ----------------------------------------
