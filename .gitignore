@@ -1,0 +1,20 @@
+# Ignore the SQLite databases (They contain your private test data)
+instance/
+*.sqlite
+*.db
+
+# Ignore Python cache files (The __pycache__ folders in your sidebar)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore Virtual Environments
+venv/
+env/
+
+# Ignore VS Code settings
+.vscode/
+
+# Ignore OS-specific files
+.DS_Store
+Thumbs.db
