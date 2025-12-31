@@ -12,5 +12,6 @@ A web-based portal for hospital staff and doctors to manage patient admissions a
 1. **Clone the repo:**
    ```bash
    git clone <your-repo-link>
-   
+2. **Install necessary modules
+    ```bash
    pip install flask flask-sqlalchemy flask-login
