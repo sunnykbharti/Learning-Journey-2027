@@ -23,6 +23,8 @@ with app.app_context():
 def load_user(user_id):
     return Users.query.get(int(user_id))
 
+#----------------------------------- HOME PAGE REDIRECTING TO LOGIN PAGE ----------------------------------------
+
 @app.route('/')
 def home():
     return redirect(url_for("login",message="Welcome"))
@@ -39,11 +41,11 @@ def register():
         if Users.query.filter_by(username=username).first():
             return render_template("register.html", error="Username already taken!")
 
-        new_user = Users(username=username, password=password)
+        new_user = Users(username=username, password=password, flag="Active")
         db.session.add(new_user)
         db.session.commit()
 
-        return redirect(url_for("login",message="Kindly Wait for admin approval!"))
+        return redirect(url_for("login"))
     return render_template("register.html")
 
 #---------------------------------- REGISTARTION BY DOCTOR/STAFF/PHARMACY --------------------------------------------------------
@@ -78,7 +80,7 @@ def registration():
             city = request.form.get("city")
             state = request.form.get("state")
 
-            newd = Staff(name=name, imcid=imcid, aadhar=aadhar, city=city, state=state)
+            newd = Staff(name=name, aadhar=aadhar, city=city, state=state)
             db.session.add(newd)
             db.session.commit()
 
@@ -94,7 +96,7 @@ def registration():
             city = request.form.get("city")
             state = request.form.get("state")
 
-            newd = Pharmacy(name=name, imcid=imcid, aadhar=aadhar, city=city, state=state)
+            newd = Pharmacy(name=name, aadhar=aadhar, city=city, state=state)
             db.session.add(newd)
             db.session.commit()
 
@@ -121,9 +123,10 @@ def login():
 
         if user and user.password==password :
             login_user(user)
-            return redirect(url_for("reception",message = "Welcome "+username))
+            return redirect(url_for("reception",message = "Welcome "+ user.username))
         else:
-            return render_template("login.html", error = "Invalid username or password!", time=time)
+            return redirect(url_for("registration", error = "Invalid username or password!"))
+            #return render_template("login.html", error = "Invalid username or password!", time=time)
     return render_template('login.html',time=time,message=msg)
 
 #---------------------------------------------- RECEPTIONIST DASHBOARD -------------------------------------------------------------
@@ -177,6 +180,21 @@ def admission():
 def patientrecord():
     patients = Patient.query.all()
     return render_template("patientrecord.html",patients=patients)
+
+#-------------------------------------Doctor Schedule -----------------------------------------------------
+
+@app.route('/doctor-schedule', methods=["GET"])
+def doctor_schedule():
+    # Get the ID from the search input field
+    search_id = request.args.get('doctor_id')
+    appointments = []
+    
+    if search_id:
+        # Filter patients by the doctor's ID
+        # Ensure your Patient model has doctor_id as we discussed
+        appointments = Patient.query.filter_by(docid=search_id).all()
+        
+    return render_template("doctor_schedule.html", appointments=appointments, search_id=search_id)
 
 
 #------------------------------------------------ FINAL RUN THE APP ----------------------------------------
